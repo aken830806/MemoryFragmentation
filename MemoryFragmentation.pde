@@ -6,7 +6,7 @@ boolean isStop = false;
 boolean testMode = true;//(true/false)
 int qCount = 0;
 boolean moving = false;
-String description;
+String showDescription = "";
 
 void setup(){
   size(600, 650);
@@ -43,12 +43,14 @@ void draw(){
     p.move();
     p.display();
   }
-  
-  if(qCount < qList.size()){
-    description = qList.get(qCount).description;
-  }else{
-    println("Finished");
-    noLoop();
+  if(isStop)
+    showDescription = showDescription+"\n Click to next step.";
+  else{
+    if(qCount < qList.size()){
+    }else{
+      showDescription = "Finished";
+      noLoop();
+    }
   }
   
   if(testMode){
@@ -63,18 +65,16 @@ void draw(){
   } //<>//
   fill(0);
   textFont(font,20);
-  text(qCount+1 + "."+description,m.width/2+1,600);
+  text(showDescription,m.width/2+1,600);
   
   popMatrix();
 }
 void mousePressed(){
-  //if(isStop){
-  //  loop();
-  //  isStop = false;
-  //}else{
-  //  noLoop();
-  //  isStop = true;
-  //}
-  moving = false;
-  qCount += 1;
+  if(isStop){
+    loop();
+    isStop = false;
+  }else{
+    noLoop();
+    isStop = true;
+  }
 }

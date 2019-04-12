@@ -40,10 +40,11 @@ class Memory{
       }
       index += 1;
     }
-    if(addInFree)
+    if(addInFree){
       pList.add(index,new Process(length,y));
-    else
+    }else{
       pList.add(new Process(length,y));
+    }
     free -= length;
     updateTitle();
   }

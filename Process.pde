@@ -27,12 +27,14 @@ class Process {
   }
   void move(){
     if(!moved){
-      if (currentX > -m.width/2)
+      if (currentX > -m.width/2){
         currentX -= 2;
-      else{
+      }else{
+        noLoop();
+        isStop = true;
         moved = true;
-        //moving = false;
-        //qCount += 1;
+        moving = false;
+        qCount += 1;
       }
     }
   }
