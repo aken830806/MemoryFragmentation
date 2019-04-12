@@ -16,7 +16,7 @@ class Memory{
     for(Process p:pList){
       if(p.title.equals("Free") && p.length > length){
         p.length -= length;
-        p.y += length;
+        p.setY(p.y +length);
         return index;
       }else{
         index += 1;
@@ -32,7 +32,7 @@ class Memory{
       if(p.title.equals("Free") && p.length > length){
         y = p.y;
         p.length -= length;
-        p.y += length;
+        p.setY(p.y +length);
         addInFree = true;
         break;
       }else{
@@ -51,6 +51,7 @@ class Memory{
     for(Process p:pList){
       if(p.title.equals(title)){
         p.title = "Free";
+        p.moved = false;
         free += p.length;
         break;
       }

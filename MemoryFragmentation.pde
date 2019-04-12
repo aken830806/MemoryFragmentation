@@ -1,14 +1,28 @@
 Memory m;
 ArrayList<Process> pList;
+ArrayList<Queue> qList;
 PFont font;
 boolean isStop = false;
-boolean testMode = false;//true/false
+boolean testMode = true;//(true/false)
+int qCount = 0;
+boolean moving = false;
 
 void setup(){
   size(600, 600);
+  font = createFont("Arial",1);
   m = new Memory();
   pList = new ArrayList<Process>();
-  font = createFont("Arial",1);
+  qList = new ArrayList<Queue>();
+  qList.add(new Queue("+",24));
+  qList.add(new Queue("+",48));
+  qList.add(new Queue("+",72));
+  qList.add(new Queue("+",96));
+  qList.add(new Queue("+",320));
+  qList.add(new Queue("-","P3"));
+  qList.add(new Queue("-","P4"));
+  qList.add(new Queue("+",56));
+  qList.add(new Queue("+",120));
+  qList.add(new Queue("-","P4"));
 }
 void draw(){
   noStroke();
@@ -18,47 +32,43 @@ void draw(){
   pushMatrix();
   translate(width*0.5,10);
   m.display();
+  
+  if(!moving && qCount < qList.size()){
+    qList.get(qCount).execute();
+    println(qCount);
+  }
+  
   for(Process p:pList){
+    p.move();
     p.display();
   }
-  if(frameCount == 100){
-    m.addProcess(24);
-  }else if(frameCount == 250){
-    m.addProcess(48);
-  }else if(frameCount == 350){
-    m.addProcess(72);
-  }else if(frameCount == 450){
-    m.addProcess(96);
-  }else if(frameCount == 500){
-    m.addProcess(320);
-  }else if(frameCount == 700){
-    m.removeProcess("P3");
-  }else if(frameCount == 770){
-    m.removeProcess("P4");
-    m.addProcess(56);
-  }else if(frameCount == 900){
-    m.addProcess(120);
-  }else if(frameCount == 1200){
-    m.removeProcess("P4");
-  }else if(frameCount == 1500){
-    if(testMode){
-      for(Process p:pList){
-        println(p.title);
-      }
-    }
+  
+  if(qCount > qList.size()){
     println("Finished");
     noLoop();
   }
-  if(testMode)
-    println(frameCount);
+  
+  if(testMode){
+    //println(frameCount/frameRate);
+    if(qCount > qList.size()){
+      //println("==Sort==");
+      //for(Process p:pList){
+      //  println(p.title);
+      //}
+      //println("=======");
+    }
+  } //<>//
+  
   popMatrix();
 }
 void mousePressed(){
-  if(isStop){
-    loop();
-    isStop = false;
-  }else{
-    noLoop();
-    isStop = true;
-  }
+  //if(isStop){
+  //  loop();
+  //  isStop = false;
+  //}else{
+  //  noLoop();
+  //  isStop = true;
+  //}
+  moving = false;
+  qCount += 1;
 }
