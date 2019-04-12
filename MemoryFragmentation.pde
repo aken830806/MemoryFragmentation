@@ -6,9 +6,10 @@ boolean isStop = false;
 boolean testMode = true;//(true/false)
 int qCount = 0;
 boolean moving = false;
+String description;
 
 void setup(){
-  size(600, 600);
+  size(600, 650);
   font = createFont("Arial",1);
   m = new Memory();
   pList = new ArrayList<Process>();
@@ -43,7 +44,9 @@ void draw(){
     p.display();
   }
   
-  if(qCount > qList.size()){
+  if(qCount < qList.size()){
+    description = qList.get(qCount).description;
+  }else{
     println("Finished");
     noLoop();
   }
@@ -58,6 +61,9 @@ void draw(){
       //println("=======");
     }
   } //<>//
+  fill(0);
+  textFont(font,20);
+  text(qCount+1 + "."+description,m.width/2+1,600);
   
   popMatrix();
 }
