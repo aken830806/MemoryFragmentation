@@ -42,6 +42,7 @@ class Memory{
         p.title = "Free";
         p.moved = false;
         free += p.space;
+        showDescription += "("+p.space/2+"K)";
         break;
       }
     }
@@ -65,6 +66,7 @@ class Memory{
       if(p.title.equals("Free")){
         if(isFree){
           pList.get(index-1).space += p.space;
+          pList.get(index-1).moved = false;
           removeIndex = index;
           break;
         }

@@ -35,7 +35,7 @@ class Process {
         moving = false;
         qCount += 1;
         noLoop();
-      }println(qCount+"/"+qList.size());
+      }
     }
   }
   void setY(float y){

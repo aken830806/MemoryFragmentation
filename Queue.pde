@@ -15,8 +15,9 @@ class Queue{
         pTitle = variable;
         this.description = "Release process "+pTitle;
         break;
+      case "f":
+        this.description = "Finished.";
     }
-    
   }
   void execute(){
     showDescription = qCount+1+"."+qList.get(qCount).description;

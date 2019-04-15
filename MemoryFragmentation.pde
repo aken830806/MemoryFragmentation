@@ -24,6 +24,7 @@ void setup(){
   qList.add(new Queue("+","56"));
   qList.add(new Queue("+","120"));
   qList.add(new Queue("-","P4"));
+  qList.add(new Queue("f",""));
 }
 void draw(){
   noStroke();
@@ -37,7 +38,6 @@ void draw(){
   if(!moving && qCount < qList.size()){
     qList.get(qCount).execute();
   }
-  
   for(Process p:pList){
     p.move();
     p.display();
@@ -45,13 +45,10 @@ void draw(){
   if(isStop){
     showDescription +="\n Click to next step.";
   }
-  if(qCount >= qList.size()-1){
-      showDescription += "\nFinished";
-      noLoop();
-  } //<>//
+   //<>//
   fill(0);
   textFont(font,20);
-  text(showDescription,m.width/2,600);
+  text(showDescription,m.width/2-50,600);
   
   popMatrix();
 }
