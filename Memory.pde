@@ -11,19 +11,6 @@ class Memory{
     textFont(font,30);
     text("Total free :\n"+free/2 + "K",-250,length/2);
   }
-  int getIndex(float length){
-    int index = 0;
-    for(Process p:pList){
-      if(p.title.equals("Free") && p.length > length){
-        p.length -= length;
-        p.setY(p.y +length);
-        return index;
-      }else{
-        index += 1;
-      }
-    }
-    return index;
-  }
   void addProcess(float length){
     float y = 0;
     int index = 0;
@@ -42,6 +29,7 @@ class Memory{
     }
     if(addInFree){
       pList.add(index,new Process(length,y));
+      pList.get(index+1).moved = true;
     }else{
       pList.add(new Process(length,y));
     }

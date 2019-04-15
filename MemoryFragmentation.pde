@@ -36,7 +36,6 @@ void draw(){
   
   if(!moving && qCount < qList.size()){
     qList.get(qCount).execute();
-    println(qCount);
   }
   
   for(Process p:pList){
@@ -77,4 +76,9 @@ void mousePressed(){
     noLoop();
     isStop = true;
   }
+}
+void showPlist(){
+  for(Process p:pList){
+      println(p.title);
+    }
 }
