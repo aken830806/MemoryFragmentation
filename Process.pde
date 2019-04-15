@@ -28,15 +28,14 @@ class Process {
   void move(){
     if(!moved){
       if (currentX > -m.width/2){
-        moving = true;
         currentX -= 2;
       }else{
-        noLoop();
         isStop = true;
         moved = true;
         moving = false;
         qCount += 1;
-      }
+        noLoop();
+      }println(qCount+"/"+qList.size());
     }
   }
   void setY(float y){

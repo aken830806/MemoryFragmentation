@@ -45,12 +45,11 @@ void draw(){
   if(isStop){
     showDescription +="\n Click to next step.";
   }
-  fprintln(qCount+"/"+qList.size
   if(qCount >= qList.size()-1){
       showDescription += "\nFinished";
       noLoop();
   } //<>//
-    }());ill(0);
+  fill(0);
   textFont(font,20);
   text(showDescription,m.width/2,600);
   

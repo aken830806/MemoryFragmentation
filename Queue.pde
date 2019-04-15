@@ -14,13 +14,13 @@ class Queue{
       case "-":
         pTitle = variable;
         this.description = "Release process "+pTitle;
-        break;:
+        break;
     }
     
   }
- void execute(){
+  void execute(){
     showDescription = qCount+1+"."+qList.get(qCount).description;
-   //moving = true;
+    moving = true;
     switch(action){
       case "+":
         m.addProcess(pSpace);
