@@ -1,25 +1,29 @@
 class Queue{
   String action;
   String description;
+  float pSpace;
   String pTitle;
-  float pLength;
   
-  Queue(String action,float pLength){
+  Queue(String action,String variable){
     this.action = action;
-    this.pLength = pLength;
-    this.description = "Add process "+pLength/2+"K";
-  }
-  Queue(String action,String pTitle){
-    this.action = action;
-    this.pTitle = pTitle;
-    this.description = "Release process "+pTitle;
-  }
-  void execute(){
-    showDescription = qCount+1+"."+qList.get(qCount).description;
-    moving = true;
     switch(action){
       case "+":
-        m.addProcess(pLength);
+        pSpace = parseInt(variable);
+        this.description = "Add process "+pSpace/2+"K";
+        break;
+      case "-":
+        pTitle = variable;
+        this.description = "Release process "+pTitle;
+        break;:
+    }
+    
+  }
+ void execute(){
+    showDescription = qCount+1+"."+qList.get(qCount).description;
+   //moving = true;
+    switch(action){
+      case "+":
+        m.addProcess(pSpace);
         break;
       case "-":
         m.removeProcess(pTitle);

@@ -14,15 +14,15 @@ void setup(){
   m = new Memory();
   pList = new ArrayList<Process>();
   qList = new ArrayList<Queue>();
-  qList.add(new Queue("+",24));
-  qList.add(new Queue("+",48));
-  qList.add(new Queue("+",72));
-  qList.add(new Queue("+",96));
-  qList.add(new Queue("+",320));
+  qList.add(new Queue("+","24"));
+  qList.add(new Queue("+","48"));
+  qList.add(new Queue("+","72"));
+  qList.add(new Queue("+","96"));
+  qList.add(new Queue("+","320"));
   qList.add(new Queue("-","P3"));
   qList.add(new Queue("-","P4"));
-  qList.add(new Queue("+",56));
-  qList.add(new Queue("+",120));
+  qList.add(new Queue("+","56"));
+  qList.add(new Queue("+","120"));
   qList.add(new Queue("-","P4"));
 }
 void draw(){
@@ -42,29 +42,17 @@ void draw(){
     p.move();
     p.display();
   }
-  if(isStop)
-    showDescription = showDescription+"\n Click to next step.";
-  else{
-    if(qCount < qList.size()){
-    }else{
-      showDescription = "Finished";
-      noLoop();
-    }
+  if(isStop){
+    showDescription +="\n Click to next step.";
   }
-  
-  if(testMode){
-    //println(frameCount/frameRate);
-    if(qCount > qList.size()){
-      //println("==Sort==");
-      //for(Process p:pList){
-      //  println(p.title);
-      //}
-      //println("=======");
-    }
+  fprintln(qCount+"/"+qList.size
+  if(qCount >= qList.size()-1){
+      showDescription += "\nFinished";
+      noLoop();
   } //<>//
-  fill(0);
+    }());ill(0);
   textFont(font,20);
-  text(showDescription,m.width/2+1,600);
+  text(showDescription,m.width/2,600);
   
   popMatrix();
 }

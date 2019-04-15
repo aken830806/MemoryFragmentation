@@ -1,39 +1,39 @@
 class Memory{
   float width = 150;
-  float length = 560;
-  float free = length;
+  float space = 560;
+  float free = space;
   
   void display(){
     stroke(0);
-    rect(-width/2,0,width,length);
+    rect(-width/2,0,width,space);
     
     fill(0);
     textFont(font,30);
-    text("Total free :\n"+free/2 + "K",-250,length/2);
+    text("Total free :\n"+free/2 + "K",-250,space/2);
   }
-  void addProcess(float length){
+  void addProcess(float space){
     float y = 0;
     int index = 0;
     boolean addInFree = false;
     for(Process p:pList){
-      if(p.title.equals("Free") && p.length > length){
+      if(p.title.equals("Free") && p.space > space){
         y = p.y;
-        p.length -= length;
-        p.setY(p.y +length);
+        p.space -= space;
+        p.setY(p.y +space);
         addInFree = true;
         break;
       }else{
-        y += p.length;
+        y += p.space;
       }
       index += 1;
     }
     if(addInFree){
-      pList.add(index,new Process(length,y));
+      pList.add(index,new Process(space,y));
       pList.get(index+1).moved = true;
     }else{
-      pList.add(new Process(length,y));
+      pList.add(new Process(space,y));
     }
-    free -= length;
+    free -= space;
     updateTitle();
   }
   void removeProcess(String title){
@@ -41,7 +41,7 @@ class Memory{
       if(p.title.equals(title)){
         p.title = "Free";
         p.moved = false;
-        free += p.length;
+        free += p.space;
         break;
       }
     }
@@ -64,7 +64,7 @@ class Memory{
     for(Process p:pList){
       if(p.title.equals("Free")){
         if(isFree){
-          pList.get(index-1).length += p.length;
+          pList.get(index-1).space += p.space;
           removeIndex = index;
           break;
         }
