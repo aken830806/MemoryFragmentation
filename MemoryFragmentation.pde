@@ -3,10 +3,11 @@ ArrayList<Process> pList;
 ArrayList<Queue> qList;
 PFont font;
 boolean isStop = false;
-boolean testMode = true;//(true/false)
+boolean testMode = false;//(true/false)
 int qCount = 0;
 boolean moving = false;
 String showDescription = "";
+Process removedProcess;
 
 void setup(){
   size(600, 650);
@@ -42,15 +43,24 @@ void draw(){
     p.move();
     p.display();
   }
+  if(removedProcess != null)
+    removedProcess.move();
+  if(removedProcess != null)
+    removedProcess.display();
   if(isStop){
     showDescription +="\n Click to next step.";
   }
-   //<>//
+  if(testMode){
+    println(frameCount);
+    println(qCount+1);
+  } //<>//
   fill(0);
   textFont(font,20);
   text(showDescription,m.width/2-50,600);
   
   popMatrix();
+  if(qCount+1 >= qList.size())
+    noLoop();
 }
 void mousePressed(){
   if(isStop){
@@ -62,7 +72,9 @@ void mousePressed(){
   }
 }
 void showPlist(){
+  println("======");
   for(Process p:pList){
-      println(p.title);
+    println(p.title);
     }
+    println("======");
 }

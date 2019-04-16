@@ -1,15 +1,22 @@
 class Process {
   String title = "";
   float space;
+  float x = -m.width/2;
   float y;
   float currentX = m.width/2;
-  float end;
   boolean moved;
+  boolean remove = false;
 
   Process(float space,float y) {
     this.space = space;
     this.y = y;
-    end = y + space;
+  }
+  Process(float space,float y,String title) {
+    this(space,y);
+    this.title = title;
+    remove = true;
+    currentX = x;
+    x = m.width/2;
   }
   void display() {
     if (title.equals("Free"))
@@ -27,11 +34,18 @@ class Process {
   }
   void move(){
     if(!moved){
-      if (currentX > -m.width/2){
+      if (currentX > x){
         currentX -= 2;
+      }else if(currentX < x){
+        currentX += 2;
       }else{
+        if(remove){
+          removedProcess = null;
+          m.updateTitle();
+        }else{
+          moved = true;
+        }
         isStop = true;
-        moved = true;
         moving = false;
         qCount += 1;
         noLoop();

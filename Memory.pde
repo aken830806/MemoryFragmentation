@@ -11,7 +11,7 @@ class Memory{
     textFont(font,30);
     text("Total free :\n"+free/2 + "K",-250,space/2);
   }
-  void addProcess(float space){
+  void loadProcess(float space){
     float y = 0;
     int index = 0;
     boolean addInFree = false;
@@ -36,18 +36,18 @@ class Memory{
     free -= space;
     updateTitle();
   }
-  void removeProcess(String title){
+  void releaseProcess(String title){
     for(Process p:pList){
       if(p.title.equals(title)){
+        removedProcess = new Process(p.space,p.y,p.title);
         p.title = "Free";
-        p.moved = false;
         free += p.space;
+        
         showDescription += "("+p.space/2+"K)";
         break;
       }
     }
     mergeFree();
-    updateTitle();
   }
   void updateTitle(){
     int titleCount = 1;
@@ -66,7 +66,6 @@ class Memory{
       if(p.title.equals("Free")){
         if(isFree){
           pList.get(index-1).space += p.space;
-          pList.get(index-1).moved = false;
           removeIndex = index;
           break;
         }

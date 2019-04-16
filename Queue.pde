@@ -24,10 +24,10 @@ class Queue{
     moving = true;
     switch(action){
       case "+":
-        m.addProcess(pSpace);
+        m.loadProcess(pSpace);
         break;
       case "-":
-        m.removeProcess(pTitle);
+        m.releaseProcess(pTitle);
         break;
     }
   }
