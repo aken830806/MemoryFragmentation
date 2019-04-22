@@ -1,6 +1,7 @@
 class Memory{
   float width = 150;
   float space = 560;
+  // 記憶體空間大小
   float free = space;
   
   void display(){
@@ -9,14 +10,15 @@ class Memory{
     
     fill(0);
     textFont(font,30);
+	// 說明文字 -250,置中處
     text("Total free :\n"+free/2 + "K",-250,space/2);
   }
-  void loadProcess(float space){
+  void loadProcess(float space){ // 讀入行程
     float y = 0;
     int index = 0;
     boolean addInFree = false;
     for(Process p:pList){
-      if(p.title.equals("Free") && p.space > space){
+      if(p.title.equals("Free") && p.space > space){ // 
         y = p.y;
         p.space -= space;
         p.setY(p.y +space);
@@ -27,10 +29,10 @@ class Memory{
       }
       index += 1;
     }
-    if(addInFree){
+    if(addInFree){ // 直接加入
       pList.add(index,new Process(space,y));
       pList.get(index+1).moved = true;
-    }else{
+    }else{ // 
       pList.add(new Process(space,y));
     }
     free -= space;
@@ -42,7 +44,6 @@ class Memory{
         removedProcess = new Process(p.space,p.y,p.title);
         p.title = "Free";
         free += p.space;
-        
         showDescription += "("+p.space/2+"K)";
         break;
       }
