@@ -7,7 +7,7 @@ class Process {
   boolean moved;
   boolean remove = false;
 
-  Process(float space,float y) {
+  Process(float space,float y) { // 
     this.space = space;
     this.y = y;
   }
@@ -47,9 +47,9 @@ class Process {
         }
         isStop = true;
         moving = false;
-        qCount += 1;
-        noLoop();
+		PauseButton.Text = "Play";
       }
+
     }
   }
   void setY(float y){
