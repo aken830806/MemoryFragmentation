@@ -25,7 +25,7 @@ class RectButton{
     y = otherButton.y;
     normalColor = otherButton.normalColor;
     Highlight = otherButton.Highlight;
-	font = createFont(otherButton.font);
+	font = otherButton.font;
   }
   
   protected boolean overRect(int mouseX, int mouseY)  {

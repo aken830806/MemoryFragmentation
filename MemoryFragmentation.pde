@@ -11,7 +11,7 @@ Process removedProcess;
 
 RectButton AddProcessButton;
 RectButton DeleteProcessButton;
-RectButton Pausebutton;
+RectButton PauseButton;
 TextBox ProcessBox;
 
 
