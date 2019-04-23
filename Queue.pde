@@ -20,13 +20,14 @@ class Queue{
     }
   }
   void execute(){
+	// 執行行程操作
     showDescription = qCount+1+"."+qList.get(qCount).description;
     moving = true;
-    switch(action){
-      case "+":
+    switch(action){ 
+      case "+": // 加入
         m.loadProcess(pSpace);
         break;
-      case "-":
+      case "-": // 移除
         m.releaseProcess(pTitle);
         break;
     }
