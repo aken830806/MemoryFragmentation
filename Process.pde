@@ -49,9 +49,7 @@ class Process {
         moving = false;
         if(mode.equals("example")){
           qCount += 1;
-          noLoop();
-        }
-        if(mode.equals("custom")){
+        }else if(mode.equals("custom")){
 		      PauseButton.Text = "Play";
         }
       }
