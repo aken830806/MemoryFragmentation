@@ -1,17 +1,18 @@
 class Memory{
   float width = 150;
-  float space = 560;
+  float space = 280;
   // 記憶體空間大小
   float free = space;
   
   void display(){
     stroke(0);
-    rect(-width/2,0,width,space);
+	// draw 2*space
+    rect(-width/2,0,width,space*2);
     
     fill(0);
     textFont(font,30);
 	// 說明文字 -250,置中處
-    text("Total free :\n"+free/2 + "K",-250,space/2);
+    text("Total free :\n"+free + "K",-250,space);
   }
   void loadProcess(float space){ // 讀入行程
     float y = 0;
@@ -21,11 +22,11 @@ class Memory{
       if(p.title.equals("Free") && p.space > space){ // 
         y = p.y;
         p.space -= space;
-        p.setY(p.y +space);
+        p.setY(p.y +space*2);
         addInFree = true;
         break;
       }else{
-        y += p.space;
+        y += 2*p.space;
       }
       index += 1;
     }
@@ -44,7 +45,7 @@ class Memory{
         removedProcess = new Process(p.space,p.y,p.title);
         p.title = "Free";
         free += p.space;
-        showDescription += "("+p.space/2+"K)";
+        showDescription += "("+p.space+"K)";
         break;
       }
     }

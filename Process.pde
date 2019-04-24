@@ -23,14 +23,15 @@ class Process {
       fill(235, 240, 242);
     else
       fill(255);
-    rect(currentX, y, m.width, space);
+	// draw 2*space 
+    rect(currentX, y, m.width, space * 2);
 
     fill(0);
     textFont(font, 14);
     float textY = 16;
     if (space/2 > textY)
       textY = space/2;
-    text(title + " " + space/2 + "K", currentX, y+textY);
+    text(title + " " + space + "K", currentX, y+textY);
   }
   void move(){
     if(!moved){
