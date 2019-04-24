@@ -58,4 +58,7 @@ class RectButton{
     text(Text, x + width/2 - textWidth(Text)/2  ,y+height/2 + TextSize*0.6f/2);
   }
   boolean getRectOver(){ if(!enabled) return false;return rectOver; }
+  void display(){
+    display(mouseX,mouseY);
+  }
 }
