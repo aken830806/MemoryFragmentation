@@ -157,15 +157,15 @@ void initExample(){
   m = new Memory();
   pList = new ArrayList<Process>();
   qList = new ArrayList<Queue>();
+  qList.add(new Queue("+","12"));
   qList.add(new Queue("+","24"));
+  qList.add(new Queue("+","36"));
   qList.add(new Queue("+","48"));
-  qList.add(new Queue("+","72"));
-  qList.add(new Queue("+","96"));
-  qList.add(new Queue("+","320"));
+  qList.add(new Queue("+","160"));
   qList.add(new Queue("-","P3"));
   qList.add(new Queue("-","P4"));
-  qList.add(new Queue("+","56"));
-  qList.add(new Queue("+","120"));
+  qList.add(new Queue("+","28"));
+  qList.add(new Queue("+","60"));
   qList.add(new Queue("-","P4"));
   qList.add(new Queue("f",""));
 }
