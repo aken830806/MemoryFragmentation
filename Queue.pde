@@ -9,7 +9,7 @@ class Queue{
     switch(action){
       case "+":
         pSpace = parseInt(variable);
-        this.description = "Add process "+pSpace/2+"K";
+        this.description = "Add process "+pSpace+"K";
         break;
       case "-":
         pTitle = variable;
