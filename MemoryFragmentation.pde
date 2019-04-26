@@ -110,7 +110,8 @@ void mousePressed(){
 	// string to Char array to get ascii code in js
 	// 直接用charAt(i)會得到值為0
 	int[] AddInput = int( ProcessBox.Text.toCharArray() );
-	for(int i =0;i<ProcessBox.Text.length();i++){
+	int i;
+	for(i =0;i<ProcessBox.Text.length();i++){
 		if(AddInput[i] < '0' || AddInput[i] > '9' ){
 			break;
 		}
@@ -125,8 +126,9 @@ void mousePressed(){
   }
   if(DeleteProcessButton.getRectOver()){
 	ProcessBox.Text = ProcessBox.Text.toUpperCase();
+	int i;
 	int[] DeleteInput = int( ProcessBox.Text.toCharArray() );
-	for(int i=0;i<ProcessBox.Text.length();i++){
+	for(i=0;i<ProcessBox.Text.length();i++){
 		if(i==0 && DeleteInput[i] != 'P')
 			break;
 		else if( i!=0 && (DeleteInput[i] < '0' || DeleteInput[i] > '9') ){
