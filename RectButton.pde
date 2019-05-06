@@ -7,6 +7,7 @@ class RectButton{
   String Text;
   public int TextSize = 18;
   boolean enabled = true;
+  boolean visible = true;
   
   RectButton(int x,int y,int width,int height,color normalColor,color Highlight){
     this.x = x;
@@ -38,6 +39,8 @@ class RectButton{
     }
   }
   void display(int mouseX,int mouseY){
+	if(!visible)
+	  return;
     rectOver = overRect(mouseX,mouseY);
 	if(!enabled)
 	  fill(color(125));
