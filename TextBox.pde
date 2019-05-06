@@ -75,7 +75,7 @@ class TextBox {
             return true;
          }
 		 else if(KEYCODE == (int)RIGHT ){
-			if(insertPos < Text.length)
+			if(insertPos < Text.length())
 				insertPos++;
 		 }
 		 else if(KEYCODE == (int)LEFT){
@@ -97,7 +97,7 @@ class TextBox {
    private void addText(String text) {
       // IF THE TEXT WIDHT IS IN BOUNDARIES OF THE TEXTBOX
       if (textWidth(Text + text) < width) {
-		 String temp = Text.substring(insertPos,Text.length);
+		 String temp = Text.substring(insertPos,Text.length());
          Text = Text.substring(0,insertPos) + text + temp;
          TextLength++;
 		 insertPos++;
@@ -106,7 +106,7 @@ class TextBox {
    
    private void BackSpace() { // delete 
       if (TextLength - 1 >= 0 && insertPos > 0) {
-         String temp = Text.substring(insertPos,Text.length);
+         String temp = Text.substring(insertPos,Text.length());
          Text = Text.substring(0, insertPos-1) + temp;
          TextLength--;
 		 insertPos--;
