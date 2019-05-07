@@ -31,13 +31,14 @@ class Memory{
       index += 1;
     }
     if(addInFree){ // 直接加入
+      ++process_index;
       pList.add(index,new Process(space,y));
       pList.get(index+1).moved = true;
     }else{ // 
+      ++process_index;
       pList.add(new Process(space,y));
     }
     free -= space;
-    updateTitle();
   }
   void releaseProcess(String title){
     for(Process p:pList){
@@ -51,19 +52,11 @@ class Memory{
     }
     mergeFree();
   }
-  void updateTitle(){
-    int titleCount = 1;
-    for(Process p:pList){
-      if(!p.title.equals("Free")){
-        p.title = "P"+titleCount;
-        titleCount += 1;
-      }
-    }
-  }
   void mergeFree(){
     boolean isFree = false;
     int index = 0;
     int removeIndex = -1;
+    // free空間合併
     for(Process p:pList){
       if(p.title.equals("Free")){
         if(isFree){
@@ -78,5 +71,21 @@ class Memory{
     }
     if(removeIndex != -1)
       pList.remove(pList.get(removeIndex));
+    //free空間與空白區域合併
+    for(int i =0;i<pList.size();i++){
+      if(pList.get(i).title.equals("Free")){ // 尋找free區域
+        int j;
+        for(j=0;j<pList.size();j++){ // 檢測其後方是否仍有prcoess存在
+          if(pList.get(i).y < pList.get(j).y){
+            break;
+          }
+        }
+        if(j == pList.size()){ // 後方不存在其他process
+          pList.remove(pList.get(i)); // 移除該free空間
+          break;
+        }
+      }
+        
+    }
   }
 }

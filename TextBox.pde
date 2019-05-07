@@ -14,13 +14,11 @@ class TextBox {
    public String Text = "";
    public int TextLength = 0;
 
-   int insertPos = 0;
-   
    private boolean selected = false;
    boolean enabled = true;
-   boolean visible = true;
    
-   
+   TextBox() {
+   }
    
    TextBox(int x, int y, int w, int h) {
       this.x = x;
@@ -30,10 +28,8 @@ class TextBox {
    }
    
    void display(int mouseX,int mouseY) {
-      if(!visible)
-         return;
-      if(enabled == true)
-         Pressed(mouseX,mouseY);
+    if(enabled == true)
+     Pressed(mouseX,mouseY);
       if (selected) {
          fill(BackgroundSelected);
       } else {
@@ -51,10 +47,9 @@ class TextBox {
       fill(Foreground);
       textSize(TextSize);
       text(Text, x + (textWidth("a") / 2), y + TextSize);
-	  // 輸入線提示
 	  if(selected && frames >= 30){
         fill(color(0));
-        rect(x + textWidth(Text.substring(0,insertPos))+textWidth("a")/2,y +textWidth("a")/2,2,textWidth("a")*2);
+        rect(x + textWidth(Text)+textWidth("a")/2,y +textWidth("a")/2,2,textWidth("a")*2);
       }
       frames = (frames+1)%61;
 	  
@@ -73,16 +68,13 @@ class TextBox {
             addText(str(' '));
          } else if (KEY == (int)ENTER) {
             return true;
-         }else if(KEYCODE == (int)RIGHT ){
-            if(insertPos < Text.length())
-               insertPos++;
-         }else if(KEYCODE == (int)LEFT){
-            if(insertPos >0 )
-               insertPos--;
-         }else {
+         } else {
             // CHECK IF THE KEY IS A LETTER OR A NUMBER
+            boolean isKeyCapitalLetter = (KEY >= 'A' && KEY <= 'Z');
+            boolean isKeySmallLetter = (KEY >= 'a' && KEY <= 'z');
             boolean isKeyNumber = (KEY >= '0' && KEY <= '9');
-            if (isKeyNumber) {
+      
+            if (isKeyCapitalLetter || isKeySmallLetter || isKeyNumber) {
                addText(str(KEY));
             }
          }
@@ -94,19 +86,15 @@ class TextBox {
    private void addText(String text) {
       // IF THE TEXT WIDHT IS IN BOUNDARIES OF THE TEXTBOX
       if (textWidth(Text + text) < width) {
-		   String temp = Text.substring(insertPos,Text.length());
-         Text = Text.substring(0,insertPos) + text + temp;
+         Text += text;
          TextLength++;
-		   insertPos++;
       }
    }
    
    private void BackSpace() { // delete 
-      if (TextLength - 1 >= 0 && insertPos > 0) {
-         String temp = Text.substring(insertPos,Text.length());
-         Text = Text.substring(0, insertPos-1) + temp;
+      if (TextLength - 1 >= 0) {
+         Text = Text.substring(0, TextLength - 1);
          TextLength--;
-		   insertPos--;
       }
    }
    

@@ -1,6 +1,7 @@
 Memory m;
 PFont font;
 ArrayList<Process> pList;//process list
+int process_index = 0;
 ArrayList<Queue> qList;//queue list
 boolean isStop;
 boolean testMode = false;//(true/false)
@@ -13,12 +14,12 @@ String mode;
 RectButton AddProcessButton;
 RectButton DeleteProcessButton;
 RectButton PauseButton;
+
+RectButton randombutton;
 TextBox ProcessBox;
 ArrayList<RectButton> bList;//button list
 Navbar bar;
 
-ButtonGroup ModeGroup ;
-ListBox ProcessList;
 void setup(){
   // 設定視窗
   size(600, 700);
@@ -78,46 +79,18 @@ void draw(){
         
         popMatrix();
         if(mode.equals("custom")){//custom
-          // mode選擇
-          if(ModeGroup.getFirstSelected() == 0){ // add mode
-          AddProcessButton.visible = true;
-          ProcessBox.visible = true;
-          ProcessList.visible = false;
-          DeleteProcessButton.visible = false;
-          }
-          else if(ModeGroup.getFirstSelected() == 1){ // release mode
-          AddProcessButton.visible = false;
-          ProcessBox.visible = false;
-          ProcessList.visible = true;
-          DeleteProcessButton.visible = true;
-          }
-          else{
-          AddProcessButton.visible = false;
-          ProcessBox.visible = false;
-          ProcessList.visible = false;
-          DeleteProcessButton.visible = false;
-          }
           stroke(255);
           // Button
           AddProcessButton.display(mouseX,mouseY);
           DeleteProcessButton.display(mouseX,mouseY);
           PauseButton.display(mouseX,mouseY);
+		  randombutton.display(mouseX,mouseY);
           // InputBox
           ProcessBox.display(mouseX,mouseY);
-          // radio button group
-          ModeGroup.display(mouseX,mouseY);
-          // ProcessList
-          ProcessList.display(mouseX,mouseY);
         }
         // 操作結束
-        if(qCount+1 >= qList.size()){
-          if(mode.equals("custom") && !AddProcessButton.enabled){
-            isStop = true;
-	          PauseButton.Text = "Reset";
-          }else{
-            isStop = true;
-          }
-        }
+        if(qCount+1 >= qList.size())
+          isStop = true;
         bar.display();
     }
   }else{
@@ -151,9 +124,7 @@ void mousePressed(){
         isStop = true;
       }
     }else if(mode.equals("custom")){
-      if(PauseButton.Text == "Reset"){ // 已經Finish 進行reset
-        initCustom();
-      }else if(isStop && PauseButton.getRectOver()){ // 進行下一步或恢復播放
+      if(isStop && PauseButton.getRectOver()){ // 進行下一步或恢復播放
         //loop();
         isStop = false;
       if(PauseButton.Text == "Start"){
@@ -171,33 +142,18 @@ void mousePressed(){
       }
       
       if(AddProcessButton.getRectOver()){
-        // string to Char array to get ascii code in js
-        // 直接用charAt(i)會得到值為0
-        int[] AddInput = int( ProcessBox.Text.toCharArray() );
-        int i;
-        if(ProcessBox.Text.length() > 0){ // 增加process
-          qList.add(new Queue("+",ProcessBox.Text));
-          ProcessList.add("P" + qList.size() + " - " + ProcessBox.Text + "k");
-          ProcessBox.Text = ""; // 清空
-        }
-        else{
-          showDescription = "Wrong !" ;
-        }
+        qList.add(new Queue("+",ProcessBox.Text));
       }
       if(DeleteProcessButton.getRectOver()){
-        if(ProcessList.getSelected() > 0){
-          qList.add( new Queue("-",ProcessList.getValue(ProcessList.getSelected()).substring(0,2)));
-          ProcessList.remove(ProcessList.getSelected());
-        }
+        qList.add(new Queue("-",ProcessBox.Text));
       }
-      ModeGroup.mousePressed();
-      ProcessList.mousePressed();
+	  if(randombutton.getRectOver()){
+		RandomTestCase();
+	  }
     }
     bar.mousePressed();
   }
-  
 }
-
 void init(){
   isStop = true;
   moving = false;
@@ -222,38 +178,24 @@ void initExample(){
 }
 void initCustom(){
   qCount = -1;
+  process_index = 0;
   // 記憶體區塊
   m = new Memory();
   // 行程list
   pList = new ArrayList<Process>();
-  qList = new ArrayList<Queue>();
   // 新增process按鈕
-  AddProcessButton = new RectButton(140,370,70,35,color(200),color(150));
+  AddProcessButton = new RectButton(10,500,70,35,color(200),color(150));
   AddProcessButton.Text = "Add";
-  DeleteProcessButton = new RectButton(40,370,145,35,color(200),color(150));
+  DeleteProcessButton = new RectButton(90,500,85,35,color(200),color(150));
   DeleteProcessButton.Text = "Release";
-  // Play 按鈕
-  PauseButton = new RectButton(225,585,80,35,color(200),color(150));
+  PauseButton = new RectButton(10,560,80,35,color(200),color(150));
   PauseButton.Text = "Start";
   // Input Box
-  ProcessBox = new TextBox(20,372,110,30);
-  // play/release mode選擇按鈕
-  RadioButton PlayRadioButton,ReleaseRadioButton;
-  PlayRadioButton = new RadioButton(40,350,5,3,color(255),color(30));
-  PlayRadioButton.Text = "Add";
-  PlayRadioButton.TextSize = 16;
-  
-  ReleaseRadioButton = new RadioButton(120,350,5,3,color(255),color(30));
-  ReleaseRadioButton.Text = "Rlease";
-  ReleaseRadioButton.TextSize = 16;
-  ModeGroup = new ButtonGroup();
-  ModeGroup.add(PlayRadioButton);
-  ModeGroup.add(ReleaseRadioButton);
-  
-  ProcessList = new ListBox(35,420,160,30,color(220),color(240));
-  ProcessList.TextSize = 16;
-
-  showDescription = "Click to Start";
+  ProcessBox = new TextBox(10,450,100,30);
+  qList = new ArrayList<Queue>();
+  // random button
+  randombutton = new RectButton(100,560,80,35,color(200),color(150));
+  randombutton.Text = "Random";
 } 
 void keyPressed() {
   if(mode.equals("custom"))
@@ -265,4 +207,44 @@ void showPlist(){
     println(p.title);
   }
   println("======");
+}
+
+
+void RandomTestCase(){
+  int add = 0; // add指令數量
+  int release = 0; // release指令數量
+  int space = (int)m.free; // 尚餘空間
+  int process_num = 0; // 當前process數量
+  int []process =  new int[11]; // 是否已被釋放
+  process[0] = 1;
+  while(add + release < 10){
+    if(process_num == 0){ // 當前不存在process 進行新增
+	    int newprocess = (int)random(12,space+1);
+	    qList.add(new Queue("+",str(newprocess)));
+  	  space -= newprocess;
+	    add++;
+	    process_num++;
+	  }
+	  else{
+	    int mode = (int)random(0,2); // 1/2 新增/釋放
+	    if(mode == 0 && space >= 12){ // add
+	  	  int newprocess_space = (int)random(12,space+1);
+	  	  qList.add(new Queue("+",str(newprocess_space)));
+	  	  add++;
+		    process_num++;
+		    space -= newprocess_space;
+	    }
+	    else{ // release
+        int release_process = 0;
+        while(process[release_process]==1){ // 檢查是否已釋放
+          release_process = (int)random(1,add+1);
+        }
+	  	  process[release_process] = 1; // 設定已釋放
+	  	  qList.add(new Queue("-","P" + release_process));
+	  	  release++;
+	  	  process_num--;
+        space += (int)qList.get(release_process).pSpace;
+      }
+	  }
+  }
 }

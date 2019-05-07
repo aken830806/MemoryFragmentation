@@ -10,6 +10,7 @@ class Process {
   Process(float space,float y) { // 
     this.space = space;
     this.y = y;
+    title = "P" + process_index;
   }
   Process(float space,float y,String title) {
     this(space,y);
@@ -25,13 +26,12 @@ class Process {
       fill(255);
 	// draw 2*space 
     rect(currentX, y, m.width, space * 2);
-
     fill(0);
     textFont(font, 14);
-    float textY = 16;
-    if (space/2 > textY)
-      textY = space/2;
-    text(title + " " + space + "K", currentX, y+textY);
+    float textY = space;
+    if(textY<0)
+      textY *= -1;
+    text(title + " " + space + "K", currentX +10 , y+textY);
   }
   void move(){
     if(!moved){
@@ -42,7 +42,6 @@ class Process {
       }else{
         if(remove){
           removedProcess = null;
-          m.updateTitle();
         }else{
           moved = true;
         }
