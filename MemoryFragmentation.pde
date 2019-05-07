@@ -17,6 +17,8 @@ TextBox ProcessBox;
 ArrayList<RectButton> bList;//button list
 Navbar bar;
 
+ButtonGroup ModeGroup ;
+ListBox ProcessList;
 void setup(){
   // 設定視窗
   size(600, 700);
@@ -76,6 +78,25 @@ void draw(){
         
         popMatrix();
         if(mode.equals("custom")){//custom
+          // mode選擇
+          if(ModeGroup.getFirstSelected() == 0){ // add mode
+          AddProcessButton.visible = true;
+          ProcessBox.visible = true;
+          ProcessList.visible = false;
+          DeleteProcessButton.visible = false;
+          }
+          else if(ModeGroup.getFirstSelected() == 1){ // release mode
+          AddProcessButton.visible = false;
+          ProcessBox.visible = false;
+          ProcessList.visible = true;
+          DeleteProcessButton.visible = true;
+          }
+          else{
+          AddProcessButton.visible = false;
+          ProcessBox.visible = false;
+          ProcessList.visible = false;
+          DeleteProcessButton.visible = false;
+          }
           stroke(255);
           // Button
           AddProcessButton.display(mouseX,mouseY);
@@ -83,10 +104,20 @@ void draw(){
           PauseButton.display(mouseX,mouseY);
           // InputBox
           ProcessBox.display(mouseX,mouseY);
+          // radio button group
+          ModeGroup.display(mouseX,mouseY);
+          // ProcessList
+          ProcessList.display(mouseX,mouseY);
         }
         // 操作結束
-        if(qCount+1 >= qList.size())
-          isStop = true;
+        if(qCount+1 >= qList.size()){
+          if(mode.equals("custom") && !AddProcessButton.enabled){
+            isStop = true;
+	          PauseButton.Text = "Reset";
+          }else{
+            isStop = true;
+          }
+        }
         bar.display();
     }
   }else{
@@ -120,7 +151,9 @@ void mousePressed(){
         isStop = true;
       }
     }else if(mode.equals("custom")){
-      if(isStop && PauseButton.getRectOver()){ // 進行下一步或恢復播放
+      if(PauseButton.Text == "Reset"){ // 已經Finish 進行reset
+        initCustom();
+      }else if(isStop && PauseButton.getRectOver()){ // 進行下一步或恢復播放
         //loop();
         isStop = false;
       if(PauseButton.Text == "Start"){
@@ -138,15 +171,33 @@ void mousePressed(){
       }
       
       if(AddProcessButton.getRectOver()){
-        qList.add(new Queue("+",ProcessBox.Text));
+        // string to Char array to get ascii code in js
+        // 直接用charAt(i)會得到值為0
+        int[] AddInput = int( ProcessBox.Text.toCharArray() );
+        int i;
+        if(ProcessBox.Text.length() > 0){ // 增加process
+          qList.add(new Queue("+",ProcessBox.Text));
+          ProcessList.add("P" + qList.size() + " - " + ProcessBox.Text + "k");
+          ProcessBox.Text = ""; // 清空
+        }
+        else{
+          showDescription = "Wrong !" ;
+        }
       }
       if(DeleteProcessButton.getRectOver()){
-        qList.add(new Queue("-",ProcessBox.Text));
+        if(ProcessList.getSelected() > 0){
+          qList.add( new Queue("-",ProcessList.getValue(ProcessList.getSelected()).substring(0,2)));
+          ProcessList.remove(ProcessList.getSelected());
+        }
       }
+      ModeGroup.mousePressed();
+      ProcessList.mousePressed();
     }
     bar.mousePressed();
   }
+  
 }
+
 void init(){
   isStop = true;
   moving = false;
@@ -175,16 +226,34 @@ void initCustom(){
   m = new Memory();
   // 行程list
   pList = new ArrayList<Process>();
+  qList = new ArrayList<Queue>();
   // 新增process按鈕
-  AddProcessButton = new RectButton(10,500,70,35,color(200),color(150));
+  AddProcessButton = new RectButton(140,370,70,35,color(200),color(150));
   AddProcessButton.Text = "Add";
-  DeleteProcessButton = new RectButton(90,500,85,35,color(200),color(150));
+  DeleteProcessButton = new RectButton(40,370,145,35,color(200),color(150));
   DeleteProcessButton.Text = "Release";
-  PauseButton = new RectButton(10,560,80,35,color(200),color(150));
+  // Play 按鈕
+  PauseButton = new RectButton(225,585,80,35,color(200),color(150));
   PauseButton.Text = "Start";
   // Input Box
-  ProcessBox = new TextBox(10,450,100,30);
-  qList = new ArrayList<Queue>();
+  ProcessBox = new TextBox(20,372,110,30);
+  // play/release mode選擇按鈕
+  RadioButton PlayRadioButton,ReleaseRadioButton;
+  PlayRadioButton = new RadioButton(40,350,5,3,color(255),color(30));
+  PlayRadioButton.Text = "Add";
+  PlayRadioButton.TextSize = 16;
+  
+  ReleaseRadioButton = new RadioButton(120,350,5,3,color(255),color(30));
+  ReleaseRadioButton.Text = "Rlease";
+  ReleaseRadioButton.TextSize = 16;
+  ModeGroup = new ButtonGroup();
+  ModeGroup.add(PlayRadioButton);
+  ModeGroup.add(ReleaseRadioButton);
+  
+  ProcessList = new ListBox(35,420,160,30,color(220),color(240));
+  ProcessList.TextSize = 16;
+
+  showDescription = "Click to Start";
 } 
 void keyPressed() {
   if(mode.equals("custom"))
