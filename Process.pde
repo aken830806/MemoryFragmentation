@@ -50,7 +50,7 @@ class Process {
         if(mode.equals("example")){
           qCount += 1;
         }else if(mode.equals("custom")){
-		      PauseButton.Text = "Play";
+		      pauseButton.Text = "Play";
         }
       }
 

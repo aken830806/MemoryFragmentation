@@ -3,22 +3,24 @@ class TextBox {
    public int TextSize = 18;
    int frames = 0;
    // COLORS
-   public color Background = color(150, 150, 150);
-   public color Foreground = color(0, 0, 0);
-   public color BackgroundSelected = color(190, 190, 190);
-   public color Border = color(30, 30, 30);
+   public color background = color(150, 150, 150);
+   public color foreground = color(0, 0, 0);
+   public color backgroundSelected = color(190, 190, 190);
+   public color border = color(30, 30, 30);
    
-   public boolean BorderEnable = false;
-   public int BorderWeight = 1;
+   public boolean borderEnable = false;
+   public int borderWeight = 1;
    
    public String Text = "";
-   public int TextLength = 0;
+   public int textLength = 0;
 
+   int insertPos = 0;
+   
    private boolean selected = false;
    boolean enabled = true;
+   boolean visible = true;
    
-   TextBox() {
-   }
+   
    
    TextBox(int x, int y, int w, int h) {
       this.x = x;
@@ -28,28 +30,33 @@ class TextBox {
    }
    
    void display(int mouseX,int mouseY) {
-    if(enabled == true)
-     Pressed(mouseX,mouseY);
+      if(!visible)
+         return;
+      if(enabled == true)
+         Pressed(mouseX,mouseY);
       if (selected) {
-         fill(BackgroundSelected);
+         fill(backgroundSelected);
       } else {
-         fill(Background);
+         fill(background);
       }
       
-      if (BorderEnable) {
-         strokeWeight(BorderWeight);
-         stroke(Border);
+      if (borderEnable) {
+         strokeWeight(borderWeight);
+         stroke(border);
       } else {
          noStroke();
       }
       
       rect(x, y, width, height);
-      fill(Foreground);
+      fill(foreground);
       textSize(TextSize);
       text(Text, x + (textWidth("a") / 2), y + TextSize);
+	  // 輸入線提示
 	  if(selected && frames >= 30){
         fill(color(0));
-        rect(x + textWidth(Text)+textWidth("a")/2,y +textWidth("a")/2,2,textWidth("a")*2);
+        if(insertPos > Text.length())
+          insertPos = Text.length();
+        rect(x + textWidth(Text.substring(0,insertPos))+textWidth("a")/2,y +textWidth("a")/2,2,textWidth("a")*2);
       }
       frames = (frames+1)%61;
 	  
@@ -68,13 +75,16 @@ class TextBox {
             addText(str(' '));
          } else if (KEY == (int)ENTER) {
             return true;
-         } else {
+         }else if(KEYCODE == (int)RIGHT ){
+            if(insertPos < Text.length())
+               insertPos++;
+         }else if(KEYCODE == (int)LEFT){
+            if(insertPos >0 )
+               insertPos--;
+         }else {
             // CHECK IF THE KEY IS A LETTER OR A NUMBER
-            boolean isKeyCapitalLetter = (KEY >= 'A' && KEY <= 'Z');
-            boolean isKeySmallLetter = (KEY >= 'a' && KEY <= 'z');
             boolean isKeyNumber = (KEY >= '0' && KEY <= '9');
-      
-            if (isKeyCapitalLetter || isKeySmallLetter || isKeyNumber) {
+            if (isKeyNumber) {
                addText(str(KEY));
             }
          }
@@ -86,15 +96,19 @@ class TextBox {
    private void addText(String text) {
       // IF THE TEXT WIDHT IS IN BOUNDARIES OF THE TEXTBOX
       if (textWidth(Text + text) < width) {
-         Text += text;
-         TextLength++;
+		     String temp = Text.substring(insertPos,Text.length());
+         Text = Text.substring(0,insertPos) + text + temp;
+         textLength++;
+		     insertPos++;
       }
    }
    
    private void BackSpace() { // delete 
-      if (TextLength - 1 >= 0) {
-         Text = Text.substring(0, TextLength - 1);
-         TextLength--;
+      if (textLength - 1 >= 0 && insertPos > 0) {
+         String temp = Text.substring(insertPos,Text.length());
+         Text = Text.substring(0, insertPos-1) + temp;
+         textLength--;
+		     insertPos--;
       }
    }
    

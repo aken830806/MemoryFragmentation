@@ -1,3 +1,5 @@
+int process_indexInQueue = 0; // qList 新增process時為其編號
+
 class Queue{
   String action;
   String description;
@@ -10,6 +12,7 @@ class Queue{
       case "+":
         pSpace = parseInt(variable);
         this.description = "Add process "+pSpace+"K";
+        pTitle = str(++process_indexInQueue);
         break;
       case "-":
         pTitle = variable;

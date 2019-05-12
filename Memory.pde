@@ -6,12 +6,11 @@ class Memory{
   
   void display(){
     stroke(0);
-	// draw 2*space
+	  // draw 2*space
     rect(-width/2,0,width,space*2);
-    
     fill(0);
     textFont(font,30);
-	// 說明文字 -250,置中處
+	  // 說明文字 -250,置中處
     text("Total free :\n"+free + "K",-250,space);
   }
   void loadProcess(float space){ // 讀入行程
@@ -19,7 +18,7 @@ class Memory{
     int index = 0;
     boolean addInFree = false;
     for(Process p:pList){
-      if(p.title.equals("Free") && p.space > space){ // 
+      if(p.title.equals("Free") && p.space >= space){ // 
         y = p.y;
         p.space -= space;
         p.setY(p.y +space*2);
@@ -71,6 +70,12 @@ class Memory{
     }
     if(removeIndex != -1)
       pList.remove(pList.get(removeIndex));
+    // 剩下0k時自動消除
+    for(int i =0;i<pList.size();i++){
+      if(pList.get(i).title.equals("Free") && pList.get(i).space == 0){
+          pList.remove(pList.get(i));
+      }
+    }
     //free空間與空白區域合併
     for(int i =0;i<pList.size();i++){
       if(pList.get(i).title.equals("Free")){ // 尋找free區域
