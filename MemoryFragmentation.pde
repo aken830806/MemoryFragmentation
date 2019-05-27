@@ -20,7 +20,7 @@ ArrayList<RectButton> bList;//button list
 Navbar bar;
 ProgressBar loadBar;
 int loadWait = 100;
-boolean loading = false;
+boolean loading = true;
 
 ButtonGroup modeGroup ;
 ListBox processList;
@@ -238,12 +238,12 @@ void mousePressed(){
     }else if(mode.equals("random")){
       if(isStop && pauseButton.getRectOver()){ // 進行下一步或恢復播放
         isStop = false;
-      if(pauseButton.Text == "Start"){
-        qList.add(new Queue("f",""));
-      }
-      pauseButton.Text = "Pause";
-      if(moving == false)
-        qCount += 1;
+        if(pauseButton.Text == "Start"){
+          qList.add(new Queue("f",""));
+        }
+        pauseButton.Text = "Pause";
+        if(moving == false)
+          qCount += 1;
       }else if( pauseButton.getRectOver() ){ // 暫停
         isStop = true;
         pauseButton.Text = "Play";

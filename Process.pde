@@ -49,7 +49,7 @@ class Process {
         moving = false;
         if(mode.equals("example")){
           qCount += 1;
-        }else if(mode.equals("custom")){
+        }else if(mode.equals("custom") || mode.equals("random")){
 		      pauseButton.Text = "Play";
         }
       }
