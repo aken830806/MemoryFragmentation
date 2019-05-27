@@ -1,5 +1,3 @@
-
-
 class ButtonGroup{
   protected ArrayList<RadioButton> Buttons = new ArrayList<RadioButton>();
   boolean exclusion = true;

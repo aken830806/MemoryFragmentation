@@ -19,8 +19,8 @@ TextBox processBox;
 ArrayList<RectButton> bList;//button list
 Navbar bar;
 ProgressBar loadBar;
-int loadWait = 150;
-boolean loading = true;
+int loadWait = 100;
+boolean loading = false;
 
 ButtonGroup modeGroup ;
 ListBox processList;
@@ -57,7 +57,7 @@ void draw(){
       if(!moving && qCount < qList.size() && !isStop){
         qList.get(qCount).execute(); // 執行該操作
       }
-      if(mode.equals("custom")){
+      if(mode.equals("custom") || mode.equals("random")){
         // 操作佇列
         textFont(font,16);
         for(int i= qCount + 1;i<qList.size();i++){
@@ -72,7 +72,7 @@ void draw(){
           p.display();
         if(p.y + p.space*2 > 280*2  ){ // 記憶體外部碎片問題偵測
           String message;
-          message = "碎裂問題產生: \n";
+          message = "碎片問題產生: \n";
           message += "Total Free Space: " + (m.free+p.space) + "k" + "\n";
           float maxcontinuum_space = (m.space*2 - p.y)/2; // 預設最後一段為最大連續記憶體
           for(int i=0;i<pList.size();i++){
@@ -84,7 +84,8 @@ void draw(){
           textFont(font,18); 
           text(message ,m.width/2+5,180);
           isStop = true;
-          pauseButton.enabled = false;
+          if(mode.equals("custom") || mode.equals("random"))
+            pauseButton.enabled = false;
         }
       }
       // 如果移除
@@ -100,55 +101,62 @@ void draw(){
         text(showDescription ,m.width/2-50,600);
       popMatrix();
       if(mode.equals("custom")){//custom
-          // mode選擇
-          if(modeGroup.getFirstSelected() == 0){ // add mode
+        // mode選擇
+        if(modeGroup.getFirstSelected() == 0){ // add mode
           addProcessButton.visible = true;
           processBox.visible = true;
           processList.visible = false;
           deleteProcessButton.visible = false;
-          }
-          else if(modeGroup.getFirstSelected() == 1){ // release mode
+        }
+        else if(modeGroup.getFirstSelected() == 1){ // release mode
           addProcessButton.visible = false;
           processBox.visible = false;
           processList.visible = true;
           deleteProcessButton.visible = true;
-          }
-          else{
+        }
+        else{
           addProcessButton.visible = false;
           processBox.visible = false;
           processList.visible = false;
           deleteProcessButton.visible = false;
-          }
-          stroke(255);
-          // Button
-          addProcessButton.display(mouseX,mouseY);
-          deleteProcessButton.display(mouseX,mouseY);
-          pauseButton.display(mouseX,mouseY);
-          randomButton.display(mouseX,mouseY);
-          // InputBox
-          processBox.display(mouseX,mouseY);
-          // radio button group
-          modeGroup.display(mouseX,mouseY);
-          // ProcessList
-          processList.display(mouseX,mouseY);
-      
         }
-        // 操作結束
-        if(qCount+1 >= qList.size()){
-          if(mode.equals("custom") && !addProcessButton.enabled){
-            isStop = true;
-            pauseButton.enabled = false;
-          }else{
-            isStop = true;
-          }
+        stroke(255);
+        // Button
+        addProcessButton.display(mouseX,mouseY);
+        deleteProcessButton.display(mouseX,mouseY);
+        pauseButton.display(mouseX,mouseY);
+        // InputBox
+        processBox.display(mouseX,mouseY);
+        // radio button group
+        modeGroup.display(mouseX,mouseY);
+        // ProcessList
+        processList.display(mouseX,mouseY);
+    
+      }else if(mode.equals("random")){
+        processList.visible = false;
+        stroke(255);
+        pauseButton.display(mouseX,mouseY);
+        randomButton.display(mouseX,mouseY);
+        // ProcessList
+        processList.display(mouseX,mouseY);
+      }
+      // 操作結束
+      if(qCount+1 >= qList.size()){
+        if(mode.equals("custom") && !addProcessButton.enabled){
+          isStop = true;
+          pauseButton.enabled = false;
+        }else{
+          isStop = true;
         }
-        bar.display();
+      }
+      bar.display();
     }
   }
   else{
     bList = new ArrayList<RectButton>();
-    bList.add(new RectButton(50,250,200,100,color(200),color(150),"example"));
-    bList.add(new RectButton(350,250,200,100,color(200),color(150),"custom"));
+    bList.add(new RectButton(50,250,100,100,color(200),color(150),"example"));
+    bList.add(new RectButton(250,250,100,100,color(200),color(150),"custom"));
+    bList.add(new RectButton(450,250,100,100,color(200),color(150),"random"));
     mode = "select";
   }
 }
@@ -165,6 +173,10 @@ void mousePressed(){
             case "custom":
               initCustom();
               mode = "custom";
+              break;
+            case "random":
+              initRandom();
+              mode = "random";
               break;
           }
         }
@@ -218,10 +230,27 @@ void mousePressed(){
           processList.remove(processList.getSelected());
         }
       }
-    if(randomButton.getRectOver()){
-    RandomTestCase();
-    }
+      if(randomButton.getRectOver()){
+        RandomTestCase();
+      }
       modeGroup.mousePressed();
+      processList.mousePressed();
+    }else if(mode.equals("random")){
+      if(isStop && pauseButton.getRectOver()){ // 進行下一步或恢復播放
+        isStop = false;
+      if(pauseButton.Text == "Start"){
+        qList.add(new Queue("f",""));
+      }
+      pauseButton.Text = "Pause";
+      if(moving == false)
+        qCount += 1;
+      }else if( pauseButton.getRectOver() ){ // 暫停
+        isStop = true;
+        pauseButton.Text = "Play";
+      }
+      if(randomButton.getRectOver()){
+        RandomTestCase();
+      }
       processList.mousePressed();
     }
     bar.mousePressed();
@@ -251,6 +280,7 @@ void LoadBar(){
 }
 
 void initExample(){
+  init();
   qCount = 0;
   m = new Memory();
   pList = new ArrayList<Process>();
@@ -268,6 +298,7 @@ void initExample(){
   qList.add(new Queue("f",""));
 }
 void initCustom(){
+  init();
   qCount = -1;
   process_index = 0;
   process_indexInQueue = 0;
@@ -307,7 +338,30 @@ void initCustom(){
   processList.TextSize = 16;
 
   showDescription = "Click to Start";
-} 
+}
+void initRandom(){
+  init();
+  qCount = -1;
+  process_index = 0;
+  process_indexInQueue = 0;
+  // 記憶體區塊
+  m = new Memory();
+  // 行程list
+  pList = new ArrayList<Process>();
+  qList = new ArrayList<Queue>();
+  // Play 按鈕
+  pauseButton = new RectButton(225,585,80,35,color(200),color(150));
+  pauseButton.Text = "Start";
+  pauseButton.enabled = true;
+  // random button
+  randomButton = new RectButton(100,560,80,35,color(200),color(150));
+  randomButton.Text = "Random";
+  
+  processList = new ListBox(35,420,160,30,color(220),color(240));
+  processList.TextSize = 16;
+
+  showDescription = "Click to Start";
+}
 void keyPressed() {
   if(mode.equals("custom"))
     processBox.KeyPressed(key,keyCode);

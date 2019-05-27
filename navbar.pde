@@ -7,8 +7,9 @@ class Navbar{
   Navbar(){
     y = height-h;
     bList = new ArrayList<RectButton>();
-    bList.add(new RectButton(100,height-35,100,35,color(200),color(150),"example"));
-    bList.add(new RectButton(400,height-35,100,35,color(200),color(150),"custom"));
+    bList.add(new RectButton(50,height-35,100,35,color(200),color(150),"example"));
+    bList.add(new RectButton(250,height-35,100,35,color(200),color(150),"custom"));
+    bList.add(new RectButton(450,height-35,100,35,color(200),color(150),"random"));
   }
   void display(){
     fill(0);
@@ -29,6 +30,10 @@ class Navbar{
           case "custom":
             initCustom();
             mode = "custom";
+            break;
+          case "random":
+            initRandom();
+            mode = "random";
             break;
         }
       }
