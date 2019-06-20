@@ -9,7 +9,7 @@ class ProgressBar{
     this.width = width;
     this.height = height;
     value = 0;
-    font = createFont("JF Dot Ayu Gothic 18", 48);
+    font = createFont("JF-Dot-Ayu18.ttf", 48);
   }
   
   void display(){

@@ -1,19 +1,17 @@
 class Navbar{
   float y;
-  float h = 40;
+  float h =50;
   ArrayList<RectButton> bList;//button list
   float button;
   
   Navbar(){
     y = height-h;
     bList = new ArrayList<RectButton>();
-    bList.add(new RectButton(50,height-35,100,35,color(200),color(150),"example"));
-    bList.add(new RectButton(250,height-35,100,35,color(200),color(150),"custom"));
-    bList.add(new RectButton(450,height-35,100,35,color(200),color(150),"random"));
+    bList.add(new RectButton(50,height-50,100,35,color(255),color(97,91,166),"範例模式"));
+    bList.add(new RectButton(250,height-50,100,35,color(255),color(97,91,166),"自訂模式"));
+    bList.add(new RectButton(450,height-50,100,35,color(255),color(97,91,166),"隨機模式"));
   }
   void display(){
-    fill(0);
-    rect(0,y,width,height);
     for(RectButton button:bList){
       button.display();
     }
@@ -23,15 +21,15 @@ class Navbar{
       if(button.getRectOver()){
         init();
         switch(button.Text){
-          case "example":
+          case "範例模式":
             initExample();
             mode = "example";
             break;
-          case "custom":
+          case "自訂模式":
             initCustom();
             mode = "custom";
             break;
-          case "random":
+          case "隨機模式":
             initRandom();
             mode = "random";
             break;

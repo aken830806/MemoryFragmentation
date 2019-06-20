@@ -7,11 +7,14 @@ class Memory{
   void display(){
     stroke(0);
 	  // draw 2*space
+    fill(97,91,166);
     rect(-width/2,0,width,space*2);
-    fill(0);
-    textFont(font,30);
+    font = createFont("Arial Black",20);
+    textFont(font,20);
 	  // 說明文字 -250,置中處
-    text("Total free :\n"+free + "K",-250,space);
+    text("Total Free :\n",-250,space);
+    textFont(font,35);
+    text(free + "K",-250,space+40);
   }
   void loadProcess(float space){ // 讀入行程
     float y = 0;

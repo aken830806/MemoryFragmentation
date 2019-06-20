@@ -3,6 +3,7 @@ class RectButton{
   int width,height;
   int x,y;
   color normalColor,Highlight;
+  color fontColor,fontHighlight;
   PFont font;
   String Text = "";
   public int TextSize = 18;
@@ -16,7 +17,7 @@ class RectButton{
     this.height = height;
     this.normalColor = normalColor;
     this.Highlight = Highlight;
-    font = createFont("Arial",TextSize);
+    font = createFont("新綜藝體.ttf",TextSize);
   }
   RectButton(int x,int y,int width,int height,color normalColor,color Highlight,String text){
     this(x,y,width,height,normalColor,Highlight);
@@ -55,8 +56,17 @@ class RectButton{
       fill(normalColor);
     }
     stroke(255);
-    rect(x, y, width, height);
-    fill(0, 102, 153);
+    rect(x, y, width, height,25,25,25,25);
+    
+    //正面字體顏色
+    if(!enabled)
+      fill(color(97,91,166));
+    else if (rectOver) {
+        fill(color(255));
+    }
+    else {
+      fill(color(97,91,166));
+    }
     textFont(font);
     text(Text, x + width/2 - textWidth(Text)/2  ,y+height/2 + TextSize*0.6f/2);
   }
