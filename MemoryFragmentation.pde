@@ -21,7 +21,7 @@ ArrayList<RectButton> bList;//button list
 Navbar bar;
 ProgressBar loadBar;
 int loadWait = 75;
-boolean loading = false;
+boolean loading = true;
 PImage backgroundImg, backgroundGaming;
 
 ButtonGroup modeGroup ;
@@ -224,6 +224,9 @@ void mousePressed() {
           qList.add(new Queue("+", processBox.Text));
           processList.add("P" + process_indexInQueue + " - " + processBox.Text + "k");
           processBox.Text = ""; // 清空
+          if(!pauseButton.enabled){
+            pauseButton.enabled = true;
+          }
         } else {
           showDescription = "Wrong !" ;
         }
@@ -238,9 +241,6 @@ void mousePressed() {
           qList.add( new Queue("-", releaseProcess.substring(0, end)) );
           processList.remove(processList.getSelected());
         }
-      }
-      if (randomButton.getRectOver()) {
-        RandomTestCase();
       }
       modeGroup.mousePressed();
       processList.mousePressed();
@@ -259,6 +259,9 @@ void mousePressed() {
       }
       if (randomButton.getRectOver()) {
         RandomTestCase();
+        if(!pauseButton.enabled){
+          pauseButton.enabled = true;
+        }
       }
       processList.mousePressed();
     }
@@ -304,7 +307,7 @@ void initExample() {
   qList.add(new Queue("-", "P4"));
   qList.add(new Queue("f", ""));
   // Start 按鈕
-  pauseButton = new RectButton(225, 580, 100, 50, color(255), color(97, 91, 166));
+  pauseButton = new RectButton(75, 460, 100, 50, color(255), color(97, 91, 166));
   pauseButton.Text = "Start";
 }
 void initCustom() {
@@ -323,9 +326,9 @@ void initCustom() {
   deleteProcessButton = new RectButton(40, 370, 145, 35, color(255), color(97, 91, 166));
   deleteProcessButton.Text = "Release";
   // Start 按鈕
-  pauseButton = new RectButton(225, 580, 100, 50, color(255), color(97, 91, 166));
+  pauseButton = new RectButton(75, 460, 100, 50, color(255), color(97, 91, 166));
   pauseButton.Text = "Start";
-  pauseButton.enabled = true;
+  pauseButton.enabled = false;
   // Input Box
   processBox = new TextBox(20, 372, 110, 30);
   // play/release mode選擇按鈕
@@ -357,11 +360,11 @@ void initRandom() {
   pList = new ArrayList<Process>();
   qList = new ArrayList<Queue>();
   // Start 按鈕
-  pauseButton = new RectButton(225, 580, 100, 50, color(255), color(97, 91, 166));
+  pauseButton = new RectButton(75, 460, 100, 50, color(255), color(97, 91, 166));
   pauseButton.Text = "Start";
-  pauseButton.enabled = true;
+  pauseButton.enabled = false;
   // random button
-  randomButton = new RectButton(100, 560, 100, 50, color(255), color(97, 91, 166));
+  randomButton = new RectButton(75, 520, 100, 50, color(255), color(97, 91, 166));
   randomButton.Text = "Random";
 
   processList = new ListBox(100, 420, 160, 30, color(220), color(240));

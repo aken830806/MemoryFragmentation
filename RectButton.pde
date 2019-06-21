@@ -51,8 +51,7 @@ class RectButton{
       fill(color(125));
     else if (rectOver) {
         fill(Highlight);
-    }
-    else {
+    }else {
       fill(normalColor);
     }
     stroke(255);
