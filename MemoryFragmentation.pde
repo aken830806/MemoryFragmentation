@@ -20,10 +20,9 @@ TextBox processBox;
 ArrayList<RectButton> bList;//button list
 Navbar bar;
 ProgressBar loadBar;
-int loadWait = 100;
+int loadWait = 75;
 boolean loading = false;
 PImage backgroundImg, backgroundGaming;
-PFont defaultFont;
 
 ButtonGroup modeGroup ;
 ListBox processList;
@@ -87,7 +86,9 @@ void draw() {
           textFont(font, 18); 
           text(message, m.width/2+5, 180);
           isStop = true;
-          if (mode.equals("custom") || mode.equals("random"))
+          if(mode.equals("example")){
+            text("End of lab.", m.width/2-180, 600);
+          }else if (mode.equals("custom") || mode.equals("random"))
             pauseButton.enabled = false;
         }
       }
@@ -99,7 +100,7 @@ void draw() {
       fill(0);
       textFont(font, 16); 
       if (!moving) {
-        if (showDescription != "Click to Start") {
+        if (showDescription != "Click to Start" && !pauseButton.visible) {
           fill(97, 91, 166);
           textFont(font, 20); 
           text("Click to next step.", m.width/2-180, 600);
@@ -110,8 +111,10 @@ void draw() {
       text(showDescription, m.width/2+10, 280);
 
       popMatrix();
-      if (mode.equals("custom")) {//custom
-        // mode選擇
+      if(mode.equals("example")){
+        pauseButton.display();
+      }else if (mode.equals("custom")) {//custom
+        // custom mode選擇
         if (modeGroup.getFirstSelected() == 0) { // add mode
           addProcessButton.visible = true;
           processBox.visible = true;
@@ -188,14 +191,16 @@ void mousePressed() {
         }
       }
     } else if (mode.equals("example")) {
-      if (isStop) {
-        isStop = false;
-      } else {
-        isStop = true;
+      if(pauseButton.visible){
+        if ( pauseButton.getRectOver() ) { // 開始
+          pauseButton.visible = false;
+          isStop = false;
+        }
+      }else if(m.free >= 0){
+        isStop = !isStop;
       }
     } else if (mode.equals("custom")) {
       if (isStop && pauseButton.getRectOver()) { // 進行下一步或恢復播放
-        //loop();
         isStop = false;
         if (pauseButton.Text == "Start") {
           qList.add(new Queue("f", ""));
@@ -206,7 +211,6 @@ void mousePressed() {
         if (moving == false)
           qCount += 1;
       } else if ( pauseButton.getRectOver() ) { // 暫停
-        //noLoop();
         isStop = true;
         pauseButton.Text = "Play";
       }
@@ -263,6 +267,7 @@ void mousePressed() {
 }
 
 void init() {
+  process_index = 0;
   isStop = true;
   moving = false;
   showDescription = "";
@@ -298,6 +303,9 @@ void initExample() {
   qList.add(new Queue("+", "60"));
   qList.add(new Queue("-", "P4"));
   qList.add(new Queue("f", ""));
+  // Start 按鈕
+  pauseButton = new RectButton(225, 580, 100, 50, color(255), color(97, 91, 166));
+  pauseButton.Text = "Start";
 }
 void initCustom() {
   init();
@@ -314,13 +322,10 @@ void initCustom() {
   addProcessButton.Text = "Add";
   deleteProcessButton = new RectButton(40, 370, 145, 35, color(255), color(97, 91, 166));
   deleteProcessButton.Text = "Release";
-  // Play 按鈕
-  pauseButton = new RectButton(420, 50, 100, 50, color(255), color(97, 91, 166));
+  // Start 按鈕
+  pauseButton = new RectButton(225, 580, 100, 50, color(255), color(97, 91, 166));
   pauseButton.Text = "Start";
   pauseButton.enabled = true;
-  // random button
-  randomButton = new RectButton(100, 560, 100, 50, color(255), color(97, 91, 166));
-  randomButton.Text = "Random";
   // Input Box
   processBox = new TextBox(20, 372, 110, 30);
   // play/release mode選擇按鈕
@@ -351,12 +356,12 @@ void initRandom() {
   // 行程list
   pList = new ArrayList<Process>();
   qList = new ArrayList<Queue>();
-  // Play 按鈕
-  pauseButton = new RectButton(225, 585, 100, 50, color(255), color(97, 91, 166));
+  // Start 按鈕
+  pauseButton = new RectButton(225, 580, 100, 50, color(255), color(97, 91, 166));
   pauseButton.Text = "Start";
   pauseButton.enabled = true;
   // random button
-  randomButton = new RectButton(60, 220, 80, 40, color(255), color(97, 91, 166));
+  randomButton = new RectButton(100, 560, 100, 50, color(255), color(97, 91, 166));
   randomButton.Text = "Random";
 
   processList = new ListBox(100, 420, 160, 30, color(220), color(240));
@@ -367,13 +372,6 @@ void initRandom() {
 void keyPressed() {
   if (mode.equals("custom"))
     processBox.KeyPressed(key, keyCode);
-}
-void showPlist() {
-  println("======");
-  for (Process p : pList) {
-    println(p.title);
-  }
-  println("======");
 }
 
 void RandomTestCase() {
