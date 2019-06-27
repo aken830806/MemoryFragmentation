@@ -1,5 +1,5 @@
 class RectButton{
-  private boolean rectOver; //
+  private boolean rectOver;
   int width,height;
   int x,y;
   color normalColor,Highlight;
@@ -17,7 +17,7 @@ class RectButton{
     this.height = height;
     this.normalColor = normalColor;
     this.Highlight = Highlight;
-    font = createFont("新綜藝體.ttf",TextSize);
+    font = createFont("AdobeGothicStd-Bold.otf",TextSize);
   }
   RectButton(int x,int y,int width,int height,color normalColor,color Highlight,String text){
     this(x,y,width,height,normalColor,Highlight);

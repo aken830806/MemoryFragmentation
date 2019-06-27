@@ -1,4 +1,4 @@
-/* @pjs font="JF-Dot-Ayu18.ttf,新綜藝體.ttf"; */
+/* @pjs font="JF-Dot-Ayu18.ttf,AdobeGothicStd-Bold.otf"; */
 Memory m;
 PFont font;
 ArrayList<Process> pList;//process list
@@ -31,7 +31,7 @@ void setup() {
   size(600, 700);
   smooth(10); // anti-aliased
   // 建立字體
-  font = createFont("新綜藝體.ttf", 1);
+  // font = createFont("微軟正黑體", 18);
   bar = new Navbar();
   loadBar = new ProgressBar(125, 347, 350, 6);
   backgroundImg = loadImage("background.png");
@@ -83,6 +83,7 @@ void draw() {
           }
           message += "最大連續記憶體空間: "+maxcontinuum_space + "k\n";
           fill(10);
+          font = createFont("微軟正黑體", 18);
           textFont(font, 18); 
           text(message, m.width/2+5, 180);
           isStop = true;
