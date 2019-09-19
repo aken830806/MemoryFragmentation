@@ -74,16 +74,16 @@ void draw() {
         p.display();
         if (p.y + p.space*2 > 280*2  ) { // 記憶體外部碎片問題偵測
           String message;
-          message = "碎片問題產生: \n";
+          message = "Memory fragmentation\n problem happens \n";
           message += "Total Free Space: " + (m.free+p.space) + "k" + "\n";
           float maxcontinuum_space = (m.space*2 - p.y)/2; // 預設最後一段為最大連續記憶體
           for (int i=0; i<pList.size(); i++) {
             if (pList.get(i).title == "Free" && pList.get(i).space > maxcontinuum_space)
               maxcontinuum_space = pList.get(i).space;
           }
-          message += "最大連續記憶體空間: "+maxcontinuum_space + "k\n";
+          // message += "最大連續記憶體空間: "+maxcontinuum_space + "k\n";
           fill(10);
-          textFont(font, 18); 
+          textFont(font, 17); 
           text(message, m.width/2+5, 180);
           isStop = true;
           if(mode.equals("example")){
@@ -107,7 +107,7 @@ void draw() {
         }
       }
       fill(97, 91, 166);
-      textFont(font, 16);
+      textFont(font, 14);
       text(showDescription, m.width/2+10, 280);
 
       popMatrix();
@@ -163,9 +163,9 @@ void draw() {
     }
   } else {
     bList = new ArrayList<RectButton>();
-    bList.add(new RectButton(200, 450, 200, 50, color(255), color(97, 91, 166), "範例模式"));
-    bList.add(new RectButton(200, 520, 200, 50, color(255), color(97, 91, 166), "自訂模式"));
-    bList.add(new RectButton(200, 590, 200, 50, color(255), color(97, 91, 166), "隨機模式"));
+    bList.add(new RectButton(200, 450, 200, 50, color(255), color(97, 91, 166), "Example"));
+    bList.add(new RectButton(200, 520, 200, 50, color(255), color(97, 91, 166), "Custom"));
+    bList.add(new RectButton(200, 590, 200, 50, color(255), color(97, 91, 166), "Random"));
     mode = "select";
   }
 }
@@ -175,15 +175,15 @@ void mousePressed() {
       for (RectButton button : bList) {
         if (button.getRectOver()) {
           switch(button.Text) {
-          case "範例模式":
+          case "Example":
             initExample();
             mode = "example";
             break;
-          case "自訂模式":
+          case "Custom":
             initCustom();
             mode = "custom";
             break;
-          case "隨機模式":
+          case "Random":
             initRandom();
             mode = "random";
             break;
